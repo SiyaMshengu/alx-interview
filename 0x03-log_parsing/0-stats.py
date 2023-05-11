@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-''' Streamlined script processes stdin input, computes metrics line by line.'''
+'''Script processes stdin input, computes metrics line by line.'''
 
 
 import sys
