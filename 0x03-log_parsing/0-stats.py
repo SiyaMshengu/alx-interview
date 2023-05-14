@@ -1,42 +1,38 @@
 #!/usr/bin/python3
-"""Reads stdin line by line and computes metrics."""
+"""
+Python script that stdin computes metrics
+"""
 import sys
 
+total_size = 0
+status_counts = {}
 
-if __name__ == "__main__":
+try:
+    for line_number, line in enumerate(sys.stdin, 1):
+        line = line.strip()
 
-    def print_stat(status_codes, file_size):
-        """Prints File size and status code count."""
-        print("File size: {}".format(file_size))
-        for k, v in sorted(status_codes.items()):
-            if v != 0:
-                print("{}: {}".format(k, v))
+        if not line.startswith('"GET /projects/260 HTTP/1.1"'):
+            continue
 
-    file_size, count = 0, 0
-    status_codes = {
-        "200": 0,
-        "301": 0,
-        "400": 0,
-        "401": 0,
-        "403": 0,
-        "404": 0,
-        "405": 0,
-        "500": 0,
-    }
+        parts = line.split()
+        if len(parts) < 6:
+            continue
 
-    try:
-        for line in sys.stdin:
-            data = line.split(" ")
-            try:
-                file_size += int(data[-1])
-                if data[-2] in status_codes.keys():
-                    count += 1
-                    status_codes[data[-2]] += 1
-                    if (count % 10) == 0:
-                        print_stat(status_codes, file_size)
-            except:
-                continue
-        print_stat(status_codes, file_size)
-    except KeyboardInterrupt:
-        print_stat(status_codes, file_size)
-        raise
+        status_code = parts[-2]
+        file_size = int(parts[-1])
+
+        total_size += file_size
+
+        if status_code.isdigit():
+            status_code = int(status_code)
+            status_counts[status_code] = status_counts.get(status.code, 0) + 1
+
+        if line_number % 10 == 0:
+            print(f"Total file size: {total_size}")
+            for code in sorted(status_counts):
+                print(f"{code}: {status_counts[code]}")
+
+except KeyboardInterrupt:
+    print(f"Total file size: {total_size}")
+    for code in sorted(status_counts):
+        print(f"{code}: {status_counts[code]}")
