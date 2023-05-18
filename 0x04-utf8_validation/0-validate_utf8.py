@@ -4,11 +4,20 @@
 
 
 def validUTF8(data):
-    
     """Checks if a given list of integers data set represents a valid UTF-8
-    encoding
+    encoding.
+
+    A character in UTF-8 can be 1 to 4 bytes long.
+    The data set can contain multiple characters.
+    The data will be represented by a list of integers.
+
+    Args:
+        data (list): A list of integers where each integer represents a byte
+        of the data.
+
+    Returns:
+        bool: True or False.
     """
-    
     skip = 0
     n = len(data)
     for i in range(n):
